@@ -1,0 +1,24 @@
+body {
+    background-color: #f8f9fa;
+}
+
+h1 {
+    color: #343a40;
+}
+
+.door {
+    cursor: pointer;
+    width: 100%;
+    height: auto;
+    transition: transform 0.2s;
+}
+
+.door:hover {
+    transform: scale(1.05);
+}
+
+#result {
+    font-size: 1.5rem;
+    margin-top: 20px;
+    color: #28a745;
+}
