@@ -73,15 +73,71 @@ document.getElementById('stopRepeatBtn').addEventListener('click', stopAutoRepea
 function resetGame() {
     chosenDoor = null;
     revealedDoor = null; // 진행자가 연 문 초기화
-    doors = generateDoors();
-    document.querySelectorAll('.door').forEach(door => {
-        door.src = "door_closed.png"; // 모든 문을 닫힌 상태로 초기화
-    });
-    document.getElementById('result').textContent = ""; // 결과 텍스트 초기화
-    document.getElementById('resultImage').style.display = "none"; // 결과 이미지 숨기기
-    document.getElementById('switchBtn').disabled = true; // 선택 변경 버튼 비활성화
     
-    // 통계 초기화는 하지 않음
+    // 자동차와 염소를 새롭게 배치
+    doors = generateDoors();
+    
+    // 모든 문을 닫힌 상태로 초기화
+    document.querySelectorAll('.door').forEach(door => {
+        door.src = "door_closed.png";
+    });
+    
+    // 결과 초기화
+    document.getElementById('result').textContent = "";
+    document.getElementById('resultImage').style.display = "none";
+    
+    // 버튼 상태 관리
+    document.getElementById('switchBtn').disabled = true; // 선택 변경 버튼 비활성화
+    document.getElementById('resetBtn').disabled = false; // 다시 시작 버튼 활성화
+}
+
+// initializeGame 함수도 수정
+function initializeGame() {
+    resetGame();
+    // 통계 초기화
+    carCount = 0;
+    goatCount = 0;
+    attemptCount = 0;
+    updateStatistics();
+    
+    // 버튼 상태 관리 추가
+    document.getElementById('resetBtn').disabled = false;
+    document.getElementById('switchBtn').disabled = true;
+}
+
+// switchChosenDoor 함수에도 버튼 상태 관리 추가
+function switchChosenDoor() {
+    // 진행자가 연 문을 제외한 나머지 문으로 변경
+    chosenDoor = 3 - chosenDoor - revealedDoor;
+    showResult();
+    
+    // 결과 표시 후 버튼 상태 관리
+    document.getElementById('resetBtn').disabled = false;
+}
+
+// showResult 함수에도 버튼 상태 관리 추가
+function showResult() {
+    const resultText = document.getElementById('result');
+    const resultImage = document.getElementById('resultImage');
+    
+    attemptCount++;
+    
+    if (doors[chosenDoor] === 1) {
+        resultText.textContent = "축하합니다! 자동차를 찾으셨습니다!";
+        carCount++;
+        resultImage.src = "car.png";
+    } else {
+        resultText.textContent = "아쉽네요, 염소를 찾으셨네요.";
+        goatCount++;
+        resultImage.src = "goat.png";
+    }
+
+    updateStatistics();
+    resultImage.style.display = "block";
+    
+    // 결과 표시 후 버튼 상태 관리
+    document.getElementById('resetBtn').disabled = false;
+    document.getElementById('switchBtn').disabled = true;
 }
 
 function initializeGame() {
